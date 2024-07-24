@@ -1,0 +1,58 @@
+﻿<!-- Le modèle de cette vue -->
+@model Projet_Session_EntityFrameworkCore.Models.Quiz
+    Quiz
+
+<!-- Le titre de la vue -->
+@{
+    ViewData["Title"] = "AnswersToQuiz";
+}
+
+<h4>Quiz Details</h4>
+
+<!-- Conteneur pour le contenu de la page. -->
+<div class="container">
+
+    <!-- Affiche l'identifiant du quiz. -->
+    <h1 class="display-4">Passer le quiz @Model.QuizId</h1>
+
+    <!-- Indique à l'utilisateur qu'il répond au quiz avec son nom et son adresse e-mail. -->
+    <p><strong>Vous répondez maintenant au quiz @Model.QuizId de @Model.UserName | @Model.Email</strong></p>
+
+    <!-- Commence le formulaire de soumission du quiz. -->
+    <form method="post" action="@Url.Action("SubmitQuiz", "Home")">
+
+        <!-- Champs cachés qui servent à transmettre des informations au serveur lors de la soumission du formulaire. -->
+        <input type="hidden" name="quizID" value="@Model.QuizId" />
+        <input type="hidden" name="userName" value="@Model.UserName" />
+        <input type="hidden" name="email" value="@Model.Email" />
+
+        <!-- Pour chaque question du quiz... -->
+        @foreach (var questionQuiz in Model.QuestionQuizs)
+        {
+            <!-- On crée un groupe de formulaires pour chaque question. -->
+            <div class="form-group">
+
+                <!-- Affiche le texte de la question. -->
+                <label>@questionQuiz.Question.Text</label>
+
+                <!-- Pour chaque option de la question... -->
+                @foreach (var itemOption in questionQuiz.Question.Options)
+                {
+                    <!-- On crée un bouton radio pour chaque option. -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answers[@questionQuiz.QuestionId]" id="option_@itemOption.OptionId" value="@itemOption.OptionId" />
+
+                        <!-- Affiche le texte de l'option. -->
+                        <label class="form-check-label" for="option_@itemOption.OptionId">@itemOption.Text</label>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- Le bouton pour soumettre le formulaire. -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Soumettre</button>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,87 @@
+﻿<!-- Le modèle de cette vue -->
+@model IEnumerable<Projet_Session_EntityFrameworkCore.Models.Quiz>
+    <!-- Le titre de la vue -->
+    @{
+        ViewData["Title"] = "ReviewQuiz";
+    }
+
+    <!-- Récupère la valeur de la variable quizId depuis le ViewBag -->
+    @{
+        var quizId = ViewBag.quizId;
+    }
+
+    <!-- Représente le contenu de la vue -->
+    <div class="container">
+        <h1 class="display-4">Réviser un quiz</h1>
+    <p><strong><span class="green-text">1. Trouver les quizs à réviser d'un utilisateur.</span></strong></p>
+        <form id="quizForm" method="post" action="@Url.Action("ReviewAnswersToQuiz", "Home")">
+            <div class="form-group">
+                <label for="userName">Nom d'utilisateur:</label>
+                <input type="text" id="userName" name="userName" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required />
+            </div>
+
+
+            <p><button type="button" id="filterButton" class="btn btn-primary">Filtrer</button></p>
+
+            <div class="form-group">
+            <label for="quiz"><strong><span class="green-text">2. Choisir un quiz.</span></strong></label>
+                <select id="quiz" name="quizID" class="form-control">
+                    <option value="">Sélectionnez un quiz</option>
+                    <!-- Boucle pour afficher chaque quiz disponible -->
+                    @foreach (var quiz in Model)
+                    {
+                        <option value="@quiz.QuizId" data-user="@quiz.UserName" data-email="@quiz.Email" data-url="@Url.Action("ReviewAnswersToQuiz", "Home", new { id = quiz.QuizId })">Quiz @quiz.QuizId</option>
+                    }
+                </select>
+            </div>
+
+        <!--POur cacher le footer et mettre le text en vert-->
+        <style>
+            .green-text {
+                color: limegreen;
+            }
+
+            .footer {
+                display: none;
+            }
+        </style>
+
+            <!-- Script pour filtrer les quiz en fonction du nom d'utilisateur et de l'email -->
+            <script>
+                document.getElementById('filterButton').addEventListener('click', function () {
+                    var userName = document.getElementById('userName').value;
+                    var email = document.getElementById('email').value;
+
+                    var quizzes = document.getElementById('quiz').options;
+                    for (var i = 0; i < quizzes.length; i++) {
+                        var quiz = quizzes[i];
+                        var user = quiz.getAttribute('data-user');
+                        var userEmail = quiz.getAttribute('data-email');
+                        if ((userName !== '' && user !== userName) || (email !== '' && userEmail !== email)) {
+                            quiz.style.display = 'none';
+                        } else {
+                            quiz.style.display = 'block';
+                        }
+                    }
+                });
+
+                // Script pour mettre à jour l'action du formulaire en fonction de l'option sélectionnée
+                document.getElementById('quiz').addEventListener('change', function () {
+                    var selectedOption = this.options[this.selectedIndex];
+                    var url = selectedOption.getAttribute('data-url');
+                    document.getElementById('quizForm').action = url;
+                });
+            </script>
+
+            <!-- Section boutons-->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Passer</button>
+                <button type="reset" class="btn btn-secondary">Annuler</button>
+            </div>
+        </form>
+    </div>

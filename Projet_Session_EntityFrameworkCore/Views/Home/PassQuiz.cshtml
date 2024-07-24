@@ -1,0 +1,95 @@
+﻿<!-- Le modèle de cette vue -->
+@model IEnumerable<Projet_Session_EntityFrameworkCore.Models.Quiz>
+<!-- Le titre de la vue -->
+@{
+    ViewData["Title"] = "Pass Quiz";
+}
+
+<!-- Une variable pour stocker le quizId depuis le ViewBag. -->
+@{
+    var quizId = ViewBag.quizId;
+}
+
+<!-- Un conteneur pour le formulaire de passage d'un quiz. -->
+<div class="container">
+
+    <!-- Le titre de la page. -->
+    <h1 class="display-4">Passer un quiz</h1>
+
+    <!-- Instruction pour l'utilisateur. -->
+    <p><strong><span class="green-text">1. Trouver les quizs d'un utilisateur</span></strong></p>
+
+    <!-- Formulaire de passage d'un quiz. Il déclenche l'action "AnswersToQuiz" sur le contrôleur "Home". -->
+    <form id="quizForm" method="post" action="@Url.Action("AnswersToQuiz", "Home")">
+
+        <!-- Champ texte pour le nom d'utilisateur. -->
+        <div class="form-group">
+            <label for="userName">Nom d'utilisateur:</label>
+            <input type="text" id="userName" name="userName" class="form-control" required />
+        </div>
+
+        <!-- Champ d'email pour l'email. -->
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required />
+        </div>
+
+        <!-- Un bouton pour filtrer les quiz en fonction de l'utilisateur et de l'email. -->
+        <p><button type="button" id="filterButton" class="btn btn-primary">Filtrer</button></p>
+
+        <!-- Menu pour sélectionner un quiz. -->
+        <div class="form-group">
+            <label for="quiz"><strong><span class="green-text">2. Choisir un quiz:</span></strong></label>
+            <select id="quiz" name="quizID" class="form-control">
+                <option value="">Sélectionnez un quiz</option>
+                @foreach (var quiz in Model)
+                {
+                    <option value="@quiz.QuizId" data-user="@quiz.UserName" data-email="@quiz.Email" data-url="@Url.Action("AnswersToQuiz", "Home", new { id = quiz.QuizId })">Quiz @quiz.QuizId</option>
+                }
+            </select>
+        </div>
+
+        <!--POur cacher le footer et mettre le text en vert-->
+        <style>
+            .green-text {
+                color: limegreen;
+            }
+            .footer {
+                display: none;
+            }
+
+        </style>
+
+        <!-- Script pour filtrer les quiz en fonction de l'utilisateur et de l'email, et pour changer l'attribut action du formulaire en fonction du quiz sélectionné. -->
+        <script>
+            document.getElementById('filterButton').addEventListener('click', function () {
+                var userName = document.getElementById('userName').value;
+                var email = document.getElementById('email').value;
+
+                var quizzes = document.getElementById('quiz').options;
+                for (var i = 0; i < quizzes.length; i++) {
+                    var quiz = quizzes[i];
+                    var user = quiz.getAttribute('data-user');
+                    var userEmail = quiz.getAttribute('data-email');
+                    if ((userName !== '' && user !== userName) || (email !== '' && userEmail !== email)) {
+                        quiz.style.display = 'none';
+                    } else {
+                        quiz.style.display = 'block';
+                    }
+                }
+            });
+
+            //Écoute l'événement "change" sur l'élément avec l'ID "quiz".
+            document.getElementById('quiz').addEventListener('change', function () {
+                var selectedOption = this.options[this.selectedIndex];
+                var url = selectedOption.getAttribute('data-url');
+                document.getElementById('quizForm').action = url;
+            });
+        </script>
+        <!-- Section boutons -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Passer</button>
+            <button type="reset" class="btn btn-secondary">Annuler</button>
+        </div>
+    </form>
+</div>

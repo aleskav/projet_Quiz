@@ -1,0 +1,72 @@
+﻿<!-- Le modèle de cette vue -->
+@model Projet_Session_EntityFrameworkCore.Models.Quiz
+<!-- Le titre de la vue -->
+@{
+    ViewData["Title"] = "New Quiz";
+}
+
+<!-- Un conteneur pour le formulaire de création de nouveau quiz. -->
+<div class="container">
+
+    <!-- Le titre de la page. -->
+    <h1 class="display-4">Créer un nouveau quiz</h1>
+
+    <!-- Les instructions pour l'utilisateur. -->
+    <p>Entrez votre nom d'utilisateur et votre email (si c'est votre première fois, il sera créé à partir des informations entrées). Choisissez ensuite le nombre de questions à répondre pour chaque catégorie.</p>
+
+    <!-- Formulaire de création de nouveau quiz. Il déclenche l'action "readyquiz" sur le contrôleur "Home". -->
+    <form method="post" action="@Url.Action("readyquiz", "Home")">
+
+        <!-- Un champ de texte pour le nom d'utilisateur. -->
+        <div class="form-group">
+            <label for="userName">Nom d'utilisateur:</label>
+            <input type="text" id="userName" name="userName" class="form-control" required />
+        </div>
+
+        <!-- Un champ de texte pour l'email. -->
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required />
+        </div>
+
+        <!-- Un champ pour le nombre de questions faciles. -->
+        <div class="form-group d-flex align-items-center">
+            <label for="easy" class="text-center">Nombre de questions de type <span class="blue-text">Facile</span>:</label>
+            <input type="number" id="easy" name="easy" class="form-control ml-2" required style="width: 120px; text-align: center;" />
+        </div>
+
+        <!-- Un champ pour le nombre de questions moyennes. -->
+        <div class="form-group d-flex align-items-center">
+            <label for="medium" class="text-center">Nombre de questions de type <span class="blue-text">Moyen</span>:</label>
+            <input type="number" id="medium" name="medium" class="form-control ml-2" required style="width: 120px; text-align: center;" />
+        </div>
+
+        <!-- Un champ pour le nombre de questions difficiles. -->
+        <div class="form-group d-flex align-items-center">
+            <label for="hard" class="text-center">Nombre de questions de type <span class="blue-text">Difficile</span>:</label>
+            <input type="number" id="hard" name="hard" class="form-control ml-2" required style="width: 120px; text-align: center;" />
+        </div>
+
+        <!-- Section boutons -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Générer</button>
+            <button type="reset" class="btn btn-secondary">Annuler</button>
+        </div>
+
+    </form>
+
+
+    <!--Pour cacher le footer et mettre en bleu les types du quiz-->
+    <style>
+      
+        .blue-text {
+            color: blue;
+        }
+
+        .footer {
+            display: none;
+        }
+    </style>
+
+   
+</div>

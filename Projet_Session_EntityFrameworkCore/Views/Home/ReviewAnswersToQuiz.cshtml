@@ -1,0 +1,58 @@
+﻿<!-- Le modèle de cette vue -->
+@model Projet_Session_EntityFrameworkCore.Models.QuizViewModel
+    <!-- Le titre de la vue -->
+    @{
+        ViewData["Title"] = "Review Answers To Quiz";
+    }
+    <!-- Un conteneur pour le formulaire de révision d'un quiz. -->
+    <div class="container">
+        <h1 class="display-4">Révision du Quiz @Model.Quiz.QuizId</h1>
+    <p><strong><em>Vous révisez maintenant le quiz @Model.Quiz.QuizId de @Model.Quiz.UserName | @Model.Quiz.Email</em></strong></p>
+    <h4><span class="green-text">Détails du Quiz</span></h4>
+        <p><strong>Vous avez @ViewBag.Score bonnes réponses sur @ViewBag.TotalQuestions</strong></p>
+
+        @foreach (var questionQuiz in Model.Quiz.QuestionQuizs) // Boucle pour afficher chaque question et ses options
+        {
+            <div class="form-group">
+                <label>@questionQuiz.Question.Text</label>
+
+
+                @foreach (var itemOption in Model.Options.Where(o => o.QuestionId == questionQuiz.QuestionId)) //Boucle pour afficher chaque option de la question
+                {
+                    var answer = Model.Quiz.Answers.FirstOrDefault(a => a.OptionId == itemOption.OptionId);
+
+                    <div class="form-check">
+                        <!-- Affichage de l'option en tant que radio bouton désactivé -->
+                        <input class="form-check-input" type="radio" name="answers[@questionQuiz.QuestionId]" id="option_@itemOption.OptionId" value="@itemOption.OptionId" disabled @(answer != null && answer.OptionId == itemOption.OptionId ? "checked" : "") />
+                        <label class="form-check-label" for="option_@itemOption.OptionId">
+                            @itemOption.Text
+
+                            @if (itemOption.IsRight) // Affichage d'un crochet pour réponses correctes
+                            {
+                                <i class="fas fa-check text-success"></i>
+                            }
+
+                            else if (answer != null && answer.OptionId == itemOption.OptionId) // Affichage d'une croix pour réponses incorrectes
+                            {
+                                <i class="fas fa-times text-danger"></i>
+                            }
+                        </label>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <!-- Lien pour retourner à la page d'accueil -->
+    <p><a href="@Url.Action("Index")">Retour à la page d'accueil</a></p>
+
+<!--POur cacher le footer et mettre le text en vert-->
+<style>
+    .green-text {
+        color: limegreen;
+    }
+
+    .footer {
+        display: none;
+    }
+
+</style>

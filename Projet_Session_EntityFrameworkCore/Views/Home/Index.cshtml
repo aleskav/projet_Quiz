@@ -1,0 +1,28 @@
+﻿<!-- Le modèle de cette vue -->
+@model Projet_Session_EntityFrameworkCore.Models.Quiz
+<!-- Le titre de la vue -->
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Crée un div avec un texte centré. -->
+<div class="text-center">
+
+    <!-- Crée une liste -->
+    <ul>
+        <!-- Le titre du quiz. -->
+        <li><h1 class="display-4">Bienvenue au Tech Quiz !</h1></li>
+
+        <!-- Une instruction pour les utilisateurs -->
+        <li style="margin-bottom: 10px;">Créez et répondez à des Quiz en suivant les 3 étapes suivantes.</li>
+
+        <!-- Un lien vers la page pour générer un nouveau quiz. -->
+        <li style="margin-bottom: 10px;"><a href="@Url.Action("newquiz", "Home")">1. Générer un nouveau quiz</a></li>
+
+        <!-- Un lien vers la page pour passer un quiz. -->
+        <li style="margin-bottom: 10px;"><a href="@Url.Action("passquiz", "Home")">2. Passer un quiz</a></li>
+
+        <!-- Un lien vers la page pour réviser un quiz. -->
+        <li style="margin-bottom: 10px;"><a href="@Url.Action("reviewquiz", "Home")">3. Réviser un quiz</a></li>
+    </ul>
+</div>
